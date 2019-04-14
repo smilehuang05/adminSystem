@@ -11,11 +11,12 @@
       <el-form-item prop='password'>
         <el-input v-model="form.password" placeholder='请输入密码' type='password'><i slot="prefix" class="iconfont icon-mima" ></i></el-input>
       </el-form-item>
-      <el-button type="primary" class="login-button">登录</el-button>
+      <el-button type="primary" class="login-button" @click = 'loginSubmit("form")'>登录</el-button>
     </el-form>
   </div>
 </template>
 <script>
+import {checkUser} from '@/api'
 export default {
   data(){
     return{
@@ -33,6 +34,31 @@ export default {
             { required: true, message: '请输入密码', trigger: 'blur' }
           ]
       }
+    }
+  },
+  methods: {
+    loginSubmit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          checkUser(this.form).then(res => {
+            if (res.meta.status == 200) {
+              this.$router.push({name:'Home'})
+              this.$message({
+                type:'success',
+                message:res.meta.msg
+              })
+            } else {
+              this.$message({
+                type: 'error',
+                message: res.meta.msg
+                
+              });
+
+            }
+
+          })
+        }
+      });
     }
   }
 }
