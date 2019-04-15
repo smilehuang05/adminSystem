@@ -9,9 +9,9 @@
         <el-input v-model="form.username" placeholder='请输入账户名'><i slot="prefix" class="iconfont icon-zhanghao"></i></el-input>
       </el-form-item>
       <el-form-item prop='password'>
-        <el-input v-model="form.password" placeholder='请输入密码' type='password'><i slot="prefix" class="iconfont icon-mima" ></i></el-input>
+        <el-input v-model="form.password" placeholder='请输入密码' type='password' @keydown.native.enter='loginSubmit("form")'><i slot="prefix" class="iconfont icon-mima" ></i></el-input>
       </el-form-item>
-      <el-button type="primary" class="login-button" @click = 'loginSubmit("form")'>登录</el-button>
+      <el-button type="primary" class="login-button" @click = 'loginSubmit("form")' >登录</el-button>
     </el-form>
   </div>
 </template>

@@ -12,16 +12,17 @@
  
   </el-col>
 
+
   </el-row>
   <el-row>
     <div>
-
-  <el-input placeholder="请输入内容" class="search-input">
-    <el-button slot="append" icon="el-icon-search"></el-button>
-  </el-input>
-  <el-button type="success" plain>添加用户</el-button>
-  </el-button>
-  </div>
+      <!-- 给组件绑定原生事件的时候，需要一个.native的修饰符 -->
+      <el-input placeholder="请输入内容" class="search-input" v-model="query" @keydown.native.enter="initList">
+        <el-button slot="append" icon="el-icon-search" @click='initList'></el-button>
+      </el-input>
+      <el-button type="success" plain>添加用户</el-button>
+      </el-button>
+    </div>
   </el-row>
 
   <el-table :data="userList" border style="width: 100%">
@@ -47,17 +48,12 @@
       <el-button size="mini" icon="el-icon-edit" plain type="primary"></el-button>
       <el-button size="mini" icon="el-icon-delete" plain type="danger"></el-button>
       <el-button size="mini" icon="el-icon-check" plain type="warning"></el-button>
-   
   </template>
   </el-table-column>
-
-
   </el-table>
   <el-pagination class="page"  @current-change="handleCurrentChange" :current-page="1" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
   </el-pagination>
   </div>
-
-
 </template>
 <script>
 import {getUserList} from '@/api'
@@ -65,6 +61,7 @@ export default {
 data() {
       return {
         userList: [],
+        query:'',
         value3:''
         
       }
@@ -80,13 +77,12 @@ data() {
         console.log(`当前页: ${val}`)
       },
        initList(){
-      getUserList({params:{query:'',pagenum:1,pagesize:3}}).then(res=>{
+      getUserList({params:{query:this.query,pagenum:1,pagesize:3}}).then(res=>{
         this.userList=res.data.users
       })
     }
     }
    
-
 }
 </script>
 <style lang="scss" scoped>
