@@ -4,14 +4,14 @@
       <!-- 侧边栏 -->
       <el-aside width="auto">
          <div class="logo"></div>
-        <el-menu :collapse="isCollapse" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" class='el-menu-vertical-demo el-menu-admin'>
+        <el-menu :router='true' :collapse="isCollapse" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" class='el-menu-vertical-demo el-menu-admin'>
          
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="2">
+            <el-menu-item index="/user">
               <i class="el-icon-menu"></i>
              用户列表
             </el-menu-item>
