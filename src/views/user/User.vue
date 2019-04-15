@@ -51,7 +51,8 @@
   </template>
   </el-table-column>
   </el-table>
-  <el-pagination class="page"  @current-change="handleCurrentChange" :current-page="1" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+  <el-pagination class="page"  @size-change='handleSizeChange'
+  @current-change="handleCurrentChange" :current-page="1" :page-sizes="[1, 2, 3, 4]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
   </el-pagination>
   </div>
 </template>
@@ -62,7 +63,10 @@ data() {
       return {
         userList: [],
         query:'',
-        value3:''
+        value3:'',
+        total:0,
+        pagesize:1,
+        pagenum:1
         
       }
     },
@@ -72,13 +76,18 @@ data() {
     methods:{
        handleSizeChange(val) {
         console.log(`每页 ${val} 条`)
+        this.pagesize=val
+        this.initList()
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
+        this.pagenum=val
+         this.initList()
       },
        initList(){
-      getUserList({params:{query:this.query,pagenum:1,pagesize:3}}).then(res=>{
+      getUserList({params:{query:this.query,pagenum:this.pagenum,pagesize:this.pagesize}}).then(res=>{
         this.userList=res.data.users
+        this.total = res.data.total
       })
     }
     }
