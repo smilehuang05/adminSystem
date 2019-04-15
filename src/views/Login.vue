@@ -39,10 +39,14 @@ export default {
   methods: {
     loginSubmit(formName) {
       this.$refs[formName].validate((valid) => {
+        //只有校验成功，才执行函数
         if (valid) {
           checkUser(this.form).then(res => {
+            //如果成功要跳转至首页，将token保存到localStroge，将username保存到vuex的state中
             if (res.meta.status == 200) {
+              console.log(res)
               localStorage.setItem('myToken',res.data.token)
+              this.$store.commit('userName',res.data.username)
               this.$router.push({name:'Home'})
               this.$message({
                 type:'success',

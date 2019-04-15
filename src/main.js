@@ -7,6 +7,7 @@ import ElementUI from 'element-ui';
 import '../src/styles/index.scss';
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/iconfont/iconfont.css';
+import store from '@/store/store';
 
 
 Vue.use(ElementUI);
@@ -34,6 +35,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
     el: '#app',
     router,
+    store,
     components: { App },
     template: '<App/>'
 })
