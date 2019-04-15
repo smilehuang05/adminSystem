@@ -42,6 +42,7 @@ export default {
         if (valid) {
           checkUser(this.form).then(res => {
             if (res.meta.status == 200) {
+              localStorage.setItem('myToken',res.data.token)
               this.$router.push({name:'Home'})
               this.$message({
                 type:'success',
