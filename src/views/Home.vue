@@ -2,38 +2,71 @@
   <div class="home">
     <el-container>
       <!-- 侧边栏 -->
-      <el-aside width="200px">
-        <el-menu default-active="2" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" class='el-menu-admin'>
-          <div class="logo"></div>
+      <el-aside width="auto">
+         <div class="logo"></div>
+        <el-menu :collapse="isCollapse" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" class='el-menu-vertical-demo el-menu-admin'>
+         
           <el-submenu index="1">
             <template slot="title">
               <i class="el-icon-location"></i>
               <span>用户管理</span>
             </template>
-            <el-menu-item index="1">
-              <i class="el-icon-menu"></i>用户列表</el-menu-item>
+            <el-menu-item index="2">
+              <i class="el-icon-menu"></i>
+             用户列表
+            </el-menu-item>
           </el-submenu>
-
         </el-menu>
       </el-aside>
       <el-container>
-        <el-header>Header</el-header>
-        <el-main>Main</el-main>
+        <!-- 头部部分 -->
+        <el-header>
+          <i class="iconfont icon-caidan toggle-btn" @click="toggleMenu"></i>
+          <div class="system-title">电商后台管理系统</div>
+          <div>
+            <span class="welcome">
+              您好，xxx
+            </span>
+            <el-button type="text" @click="loginOut">退出</el-button>
+          </div>
+        </el-header>
+        <!-- 中间内容部分 -->
+        <el-main>
+          <router-view></router-view>
+        </el-main>
       </el-container>
+
     </el-container>
   </div>
 </template>
 <script>
-import {getUserList} from '@/api'
+import { getUserList } from '@/api'
 export default {
+  data() {
+    return {
+      isCollapse: false
+    }
+  },
+
   methods: {
-      handleOpen(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
-      }
+    handleOpen(key, keyPath) {
+      console.log(key, keyPath);
     },
+    handleClose(key, keyPath) {
+      console.log(key, keyPath);
+    },
+    toggleMenu(){
+      console.log(11)
+      this.isCollapse=!this.isCollapse;
+    },
+    loginOut(){
+      //清除登录状态，即保存再localStorage中token
+      localStorage.removeItem('myToken')
+      //跳转到登录页面
+      this.$router.push({name:'Login'})
+
+    }
+  },
   mounted(){
     let params = {params:{query:'',pagenum:1,pagesize:1}}
     getUserList(params).then(res=>{
@@ -45,8 +78,10 @@ export default {
 <style lang="scss" scoped>
 .home{
   height: 100%;
+  min-height: 400px;
   .el-menu-admin{
-    width:200px;
+    border-right: none;
+  
   }
   .el-container{
     height: 100%;
@@ -55,13 +90,30 @@ export default {
     background-color: #545c64;
   }
   .el-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     background-color: #545c64;
+    .system-title{
+      font-size: 26px;
+      color:#fff;
+    }
+    .welcome{
+      font-size: 14px;
+      color:#fff;
+    }
   }
   .logo{
     background:url(../assets/logo.png);
     height: 60px;
     background-color: #989898;
     background-size: cover;
+  }
+  .toggle-btn{
+    font-size: 36px;
+    color: #989898;
+    line-height: 60px;
+    font-weight: bold;
   }
 }
 
