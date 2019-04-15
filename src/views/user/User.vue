@@ -37,13 +37,13 @@
   <el-table-column prop="mobile" label="电话">
   </el-table-column>
  
-  <el-table-column label="操作">
+  <el-table-column label="用户状态">
     <template slot-scope="scope">
-      <el-switch v-model="value3">
+      <el-switch v-model="scope.row.mg_state" @change='changeUserState(scope.row)'>
       </el-switch>
     </template>
   </el-table-column>
-   <el-table-column label="用户状态">
+   <el-table-column label="操作">
     <template slot-scope="scope">
       <el-button size="mini" icon="el-icon-edit" plain type="primary"></el-button>
       <el-button size="mini" icon="el-icon-delete" plain type="danger"></el-button>
@@ -57,17 +57,15 @@
   </div>
 </template>
 <script>
-import {getUserList} from '@/api'
+import {getUserList,changeUserState} from '@/api'
 export default {
 data() {
       return {
         userList: [],
         query:'',
-        value3:'',
         total:0,
         pagesize:1,
-        pagenum:1
-        
+        pagenum:1     
       }
     },
     created(){
@@ -88,6 +86,23 @@ data() {
       getUserList({params:{query:this.query,pagenum:this.pagenum,pagesize:this.pagesize}}).then(res=>{
         this.userList=res.data.users
         this.total = res.data.total
+      })
+    },
+    //改变用户状态
+    changeUserState(row){
+      console.log(row)
+      changeUserState({uid:row.id,type:row.mg_state}).then(res=>{
+        if(res.meta.status==200){
+          this.$message({
+            type:'success',
+            message:res.meta.msg       
+          })
+        }else{       
+          this.$message({
+            type:'warning',
+            message:res.meta.msg       
+          })
+        }
       })
     }
     }
