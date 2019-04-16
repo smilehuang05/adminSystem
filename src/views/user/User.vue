@@ -44,7 +44,7 @@
   </el-table-column>
    <el-table-column label="操作">
     <template slot-scope="scope">
-      <el-button size="mini" icon="el-icon-edit" plain type="primary"></el-button>
+      <el-button size="mini" icon="el-icon-edit" plain type="primary" @click="showEditDialog(scope.row)"></el-button>
       <el-button size="mini" icon="el-icon-delete" plain type="danger"></el-button>
       <el-button size="mini" icon="el-icon-check" plain type="warning"></el-button>
   </template>
@@ -74,10 +74,28 @@
     <el-button type="primary" @click="addUserSubmit('addForm')">确 定</el-button>
   </div>
 </el-dialog>
+<!-- 编辑用户对话框 -->
+  <el-dialog title="收货地址" :visible.sync="editDialogFormVisible">
+  <el-form :model="editForm" label-width="80px" :rules='rules' ref='editForm'>
+    <el-form-item label="用户名" prop='username'>
+      <el-input v-model="editForm.username" autocomplete="off" :disabled="true" width='auto'></el-input>
+    </el-form-item>
+    <el-form-item label="邮箱" prop='email'>
+      <el-input v-model="editForm.email" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="电话" prop='mobile'>
+      <el-input v-model="editForm.mobile" autocomplete="off"></el-input>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="editDialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="eddUserSubmit('editForm')">确 定</el-button>
+  </div>
+</el-dialog>
   </div>
 </template>
 <script>
-import {getUserList,changeUserState,addUsers} from '@/api'
+import {getUserList,changeUserState,addUsers,getUsers,editUsers} from '@/api'
 export default {
 data() {
       return {
@@ -92,6 +110,13 @@ data() {
           password:'',
           email:'',
           mobile:''
+        },
+        editDialogFormVisible: false,
+        editForm: {
+          username: '',
+          email: '',
+          mobile: '',
+          id:0
         },
           rules: {
           username: [
@@ -170,6 +195,40 @@ data() {
            this.initList()
         }
       })
+  },
+  //显示编辑对话框
+    showEditDialog(row) {
+      this.editDialogFormVisible = true
+      console.log(row)
+      getUsers(row.id).then(res => {
+        console.log(res)
+        if (res.meta.status === 200) {
+          this.editForm = res.data
+        }
+
+      })
+    },
+    eddUserSubmit(formName) {
+      this.$refs[formName].validate(valide => {
+        if (valide) {
+          editUsers(this.editForm).then(res => {
+            console.log(res)
+            if (res.meta.status === 200) {
+              this.$message({
+                type: 'success',
+                message: res.meta.msg
+              })
+              this.editDialogFormVisible = false
+              this.initList()
+            } else {
+              this.$message({
+                type: 'warning',
+                message: res.meta.msg
+              })
+            }
+          })
+        }
+    })
   }
     }
    

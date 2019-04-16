@@ -33,3 +33,13 @@ export const changeUserState = params => {
 export const addUsers = params => {
     return axios.post('users', params).then(res => res.data)
 }
+
+//根据ID获取用户信息
+export const getUsers = params => {
+    return axios.get(`users/${params}`).then(res => res.data)
+}
+
+//编辑用户信息
+export const editUsers = params => {
+    return axios.put(`users/${params.id}`, params).then(res => res.data)
+}
