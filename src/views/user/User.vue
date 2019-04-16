@@ -12,7 +12,6 @@
  
   </el-col>
 
-
   </el-row>
   <el-row>
     <div>
@@ -20,7 +19,7 @@
       <el-input placeholder="请输入内容" class="search-input" v-model="query" @keydown.native.enter="initList">
         <el-button slot="append" icon="el-icon-search" @click='initList'></el-button>
       </el-input>
-      <el-button type="success" plain>添加用户</el-button>
+      <el-button type="success" plain @click="addDialogFormVisible = true">添加用户</el-button>
       </el-button>
     </div>
   </el-row>
@@ -52,20 +51,64 @@
   </el-table-column>
   </el-table>
   <el-pagination class="page"  @size-change='handleSizeChange'
-  @current-change="handleCurrentChange" :current-page="1" :page-sizes="[1, 2, 3, 4]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
+  @current-change="handleCurrentChange" :current-page="1" :page-sizes="[5, 10, 15, 20]" :page-size="1" layout="total, sizes, prev, pager, next, jumper" :total="total">
   </el-pagination>
+  <!-- 添加用户对话框 -->
+  <el-dialog title="收货地址" :visible.sync="addDialogFormVisible">
+  <el-form :model="addForm" label-width="80px" :rules='rules' ref='addForm'>
+    <el-form-item label="用户名" prop='username'>
+      <el-input v-model="addForm.username" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="密码" prop='password'>
+      <el-input v-model="addForm.password" autocomplete="off" type='password'></el-input>
+    </el-form-item>
+    <el-form-item label="邮箱" prop='email'>
+      <el-input v-model="addForm.email" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="电话" prop='mobile'>
+      <el-input v-model="addForm.mobile" autocomplete="off"></el-input>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="addDialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="addUserSubmit('addForm')">确 定</el-button>
+  </div>
+</el-dialog>
   </div>
 </template>
 <script>
-import {getUserList,changeUserState} from '@/api'
+import {getUserList,changeUserState,addUsers} from '@/api'
 export default {
 data() {
       return {
         userList: [],
         query:'',
         total:0,
-        pagesize:1,
-        pagenum:1     
+        pagesize:5,
+        pagenum:1,
+        addDialogFormVisible:false,
+        addForm:{
+          username:'',
+          password:'',
+          email:'',
+          mobile:''
+        },
+          rules: {
+          username: [
+            { required: true, message: '请输入用户名', trigger: 'blur' }
+            
+          ],
+          password: [
+            { required: true, message: '请输入密码', trigger: 'blur' }
+          ],
+           email: [
+            { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+             { type:'email',message:'请输入正确的邮箱地址',trigger:'blur,change' }
+          ],
+          mobile:[
+            {required:true,message:'电话不能为空'}
+          ]
+      }     
       }
     },
     created(){
@@ -104,7 +147,30 @@ data() {
           })
         }
       })
-    }
+    },
+    //添加用户
+    addUserSubmit(formName){
+      this.$refs[formName].validate(valide=>{
+        if(valide){
+          //执行添加用户方法
+          addUsers(this.addForm).then(res=>{
+           if(res.meta.status==201){
+          this.$message({
+            type:'success',
+            message:res.meta.msg       
+          })
+        }else{       
+          this.$message({
+            type:'warning',
+            message:res.meta.msg       
+          })
+        }  
+          })
+           this.addDialogFormVisible=false
+           this.initList()
+        }
+      })
+  }
     }
    
 }
