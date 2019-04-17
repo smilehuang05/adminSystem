@@ -122,7 +122,7 @@ export default {
   .logo{
     background:url(../assets/logo.png);
     height: 60px;
-    background-color: #989898;
+    background-color: #545c64;
     background-size: cover;
   }
   .toggle-btn{

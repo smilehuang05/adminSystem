@@ -15,10 +15,16 @@
   <el-table 
     :data="roleList" border class="mt-10"
     style="width: 100%">
+    
     <el-table-column type="expand">
+      
       <template slot-scope="scope">
         <div>11111</div>
       </template>
+    </el-table-column>
+    <el-table-column
+      type="index"
+      width="50">
     </el-table-column>
     <el-table-column 
       label="角色名称"
