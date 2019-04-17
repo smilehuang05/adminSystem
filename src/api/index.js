@@ -56,6 +56,10 @@ export const getRoleList = params => {
 
 //分配角色列表
 export const grantRoleList = params => {
-    debugger
     return axios.put(`users/${params.id}/role`, { id: params.id, rid: params.rid }).then(res => res.data)
+}
+
+//获取所有权限列表
+export const getRightsList = params => {
+    return axios.get(`rights/${params.type}`).then(res => res.data)
 }
