@@ -47,12 +47,12 @@ export default {
     }
   },
   created(){
-   this.loading=true,
+   this.loading=true
     getRightsList({type:'list'}).then(res=>{
       if(res.meta.status===200){
-        
-        this.rightsList=res.data
         this.loading=false
+        console.log(this.rightsList)
+        this.rightsList=res.data
       }
       console.log(res)
     })
