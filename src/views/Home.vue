@@ -4,7 +4,7 @@
       <!-- 侧边栏 -->
       <el-aside width="auto">
          <div class="logo"></div>
-        <el-menu :router='true' :collapse="isCollapse" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" class='el-menu-vertical-demo el-menu-admin'>
+        <el-menu :router='true' :collapse="isCollapse" @open="handleOpen" @close="handleClose" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" class='el-menu-vertical-demo el-menu-admin' :unique-opened='true'>
          
           <el-submenu index="1">
             <template slot="title">
@@ -16,6 +16,22 @@
              用户列表
             </el-menu-item>
           </el-submenu>
+
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>权限管理</span>
+            </template>
+            <el-menu-item index="/roles">
+              <i class="el-icon-menu"></i>
+             角色列表
+            </el-menu-item>
+            <el-menu-item index="/rights">
+              <i class="el-icon-menu"></i>
+             权限列表
+            </el-menu-item>
+          </el-submenu>
+
         </el-menu>
       </el-aside>
       <el-container>
