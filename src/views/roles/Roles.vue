@@ -1,5 +1,5 @@
 <template>
-  <div class="rights">
+  <div class="roles">
      <el-row>
       <el-col :span="24">
         <el-breadcrumb separator="/">
@@ -19,7 +19,32 @@
     <el-table-column type="expand">
       
       <template slot-scope="scope">
-        <div>11111</div>
+   
+  <el-row v-for="firstChildren in scope.row.content" :key='firstChildren.id'>
+    <el-col :span='4'>
+      <el-tag closable>
+        {{firstChildren.authName}} 
+      </el-tag>
+      <i class="el-icon-arrow-right" v-if='firstChildren.children.length !==0'></i>
+    </el-col>
+    <el-col :span='20'>
+      <el-row v-for='secondChildren in firstChildren.children' :key='secondChildren.id'>
+        <el-col :span='5'>
+          <el-tag closable type='success'>
+            {{secondChildren.authName}}
+          </el-tag>
+          <i class="el-icon-arrow-right"></i>
+        </el-col>
+        <el-col :span='19'>
+          <el-tag closable type='warning' v-for='thirdChildren in secondChildren.children' :key='thirdChildren.id'>
+            {{thirdChildren.authName}}
+          </el-tag>
+        </el-col>
+
+
+            </el-row>
+          </el-col>
+        </el-row>
       </template>
     </el-table-column>
     <el-table-column
@@ -28,11 +53,13 @@
     </el-table-column>
     <el-table-column 
       label="角色名称"
-      prop="roleName">
+      prop="roleName"
+      width="90">
     </el-table-column>
     <el-table-column
       label="描述"
-      prop="roleDesc">
+      prop="roleDesc"
+      width="130">
     </el-table-column>
     <el-table-column
       label="操作">
@@ -75,5 +102,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+  .roles{
+    .el-tag{
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+  }
 </style>
